@@ -1,7 +1,7 @@
 # PokeAi Catcher
 AI Autochater For Poketwo
 
-** Features : **
+## Features : 
 
 > 1. AI Autocatcher
 > 2.  Auto Captcha Solver
