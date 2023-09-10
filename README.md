@@ -21,7 +21,7 @@ AI Autochater For Poketwo
 |Variables   | Description  |
 |---|---|
 |  `token` | User Token  |
-| `gulid`  | Server To Perform Catching  |
-| `ownerid`  | ID Of The Owner [ Uses For Commands]  |
-| `spamid`  | Channel To Spam Messages  |
-| `captchachannel`  | Same As `gulid`  |
+|  `gulid`  | Server To Perform Catching  |
+|  `ownerid`  | ID Of The Owner [ Uses For Commands]  |
+|  `spamid`  | Channel To Spam Messages  |
+|  `captchachannel`  | Same As `gulid`  |
