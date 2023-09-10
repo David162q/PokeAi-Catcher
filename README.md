@@ -8,4 +8,12 @@ AI Autochater For Poketwo
 
 ### Start Using On [`Repel It`](https://replit.com/@SpreadSheets650/PokeAiCatch?v=1)
 
-### ** The Variables Used **
+--------
+
+### The Variables Used In Secrets
+
+|Variables   | Description  |
+|---|---|
+|  `token` | User Token  |
+|   |   |
+|   |   |
