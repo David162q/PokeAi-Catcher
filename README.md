@@ -20,7 +20,7 @@ AI Autochater For Poketwo
 |Commands   | Description  |
 |---|---|
 |  `stop catcher` | Stops Catching [ Spammer Will Be Working ]  |
-|  `stop spammer`  | Stops Spamming [ But Catching Won't Stop | Can Be Used In Incense]  |
+|  `stop spammer`  | Stops Spamming [ But Catching Won't Stop - Used In Incense ]  |
 |  `Start`  | Starts Back Spammer And Catcher  |
 |  `say`  | Repeates After The Owner  |
 
