@@ -20,6 +20,7 @@ timerlist = [1.0, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
 intervals = [2.5, 3, 3.5, 4, 4.5, 5]
 
 is_spamming = False
+spam_paused = False
 
 bot_prefix = "."
 bot = commands.Bot(command_prefix=".")
@@ -45,7 +46,7 @@ def solve(message):
 
 @tasks.loop(seconds=random.choice(intervals))
 async def spam():
-    if is_spamming:
+    if is_spamming and not spam_paused:
         channel = bot.get_channel(spamid)
         message = "".join(
             random.choices(string.ascii_uppercase + string.ascii_lowercase +
@@ -80,7 +81,7 @@ async def after_spam():
 async def on_ready():
 
     global is_spamming
-  
+
     await bot.change_presence(status=discord.Status.online)
     print('------- Logged In As : {0.user}'.format(bot))
     bot.db = await aiosqlite.connect("pokemon.db")
@@ -95,7 +96,7 @@ async def on_ready():
 @bot.event
 async def on_message(message):
 
-    global is_spamming
+    global is_spamming, spam_paused
 
     while not hasattr(bot, 'db'):
         await asyncio.sleep(1.0)
@@ -130,9 +131,12 @@ async def on_message(message):
                                 await message.channel.send(
                                     f'<@716390085896962058> c {name}')
 
-                elif "Pride Buddy" in embed.title:
-                    await asyncio.sleep(3)
-                    await message.components[0].children[0].click()
+
+#           For Clicking Of Buttons :
+
+#               await asyncio.sleep(3)
+#               await message.components[0].children[0].click()
+
             elif 'wrong' in message.content:
                 await asyncio.sleep(1)
                 await message.channel.send('<@716390085896962058> h')
@@ -142,7 +146,6 @@ async def on_message(message):
             elif 'This will override' in message.content:
                 await asyncio.sleep(2)
                 await message.components[0].children[0].click()
-
             elif 'human' in message.content:
                 is_spamming = False
                 cur = await bot.db.execute("SELECT command from pokies")
@@ -196,7 +199,7 @@ async def on_message(message):
                     await bot.db.execute("UPDATE pokies SET command = ?",
                                          ("grind", ))
                 await bot.db.commit()
-            elif f"{bot_prefix}stop" in message.content:
+            elif f"{bot_prefix}stop catcher" in message.content:
                 await message.delete()
                 async with message.channel.typing():
                     await asyncio.sleep(2.0)
@@ -212,6 +215,14 @@ async def on_message(message):
                     await bot.db.execute("UPDATE pokies SET command = ?",
                                          ("hold", ))
                 await bot.db.commit()
+
+            elif f"{bot_prefix}stop spammer" in message.content:
+                await message.delete()
+                async with message.channel.typing():
+                    await asyncio.sleep(2.0)
+                is_spamming = False
+                spam_paused = True
+                await message.channel.send("Ok I Am Stopped Spamming")
 
     elif message.channel in bot.private_channels:
         if message.author.id == ownerid:
@@ -282,7 +293,16 @@ async def start_spam(ctx):
     global is_spamming
     is_spamming = True
     spam.start()
-    await ctx.send("Spamming started.")
+    await ctx.send("Spamming Started.")
+
+
+@bot.command()
+async def resume_spam(ctx):
+    global is_spamming, spam_paused
+    is_spamming = True
+    spam_paused = False
+    spam.start()
+    await ctx.send("Spamming Resumed.")
 
 
 @bot.command()
@@ -290,7 +310,7 @@ async def stop_spam(ctx):
     global is_spamming
     is_spamming = False
     spam.stop()
-    await ctx.send("Spamming stopped.")
+    await ctx.send("Spamming Stopped.")
 
 
 keep_alive()
