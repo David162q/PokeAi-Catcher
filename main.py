@@ -86,7 +86,7 @@ async def on_ready():
     print('------- Logged In As : {0.user}'.format(bot))
     bot.db = await aiosqlite.connect("pokemon.db")
     await bot.db.execute("CREATE TABLE IF NOT EXISTS pokies (command str)")
-    print("------- Pokies Table Created -------")
+    print("------- Pokemon Table Created -------")
     await bot.db.commit()
 
     is_spamming = True
@@ -131,21 +131,19 @@ async def on_message(message):
                                 await message.channel.send(
                                     f'<@716390085896962058> c {name}')
 
-
-#           For Clicking Of Buttons :
-
-#               await asyncio.sleep(3)
-#               await message.components[0].children[0].click()
-
             elif 'wrong' in message.content:
                 await asyncio.sleep(1)
                 await message.channel.send('<@716390085896962058> h')
+
             elif 'The pokémon is' in message.content:
                 await asyncio.sleep(1)
                 await catch(message)
+
             elif 'This will override' in message.content:
                 await asyncio.sleep(2)
-                await message.components[0].children[0].click()
+                await message.components[0].children[0].click(
+                )  # For Clicking Of Buttons
+
             elif 'human' in message.content:
                 is_spamming = False
                 cur = await bot.db.execute("SELECT command from pokies")
@@ -177,20 +175,23 @@ async def on_message(message):
                 msg = message.content.split(" ", 1)[1]
                 await message.delete()
                 await message.channel.send(msg)
-            elif f"{bot_prefix}start" in message.content or "captcha done" in message.content:
 
+            elif f"{bot_prefix}start" in message.content or "captcha done" in message.content:
                 if f"{bot_prefix}start" in message.content:
                     async with message.channel.typing():
                         await asyncio.sleep(2.0)
                     await message.channel.send("Ok Let's Go")
                     is_spamming = True
+                    spam_paused = False
                 else:
                     async with message.channel.typing():
                         await asyncio.sleep(2.0)
                     await message.channel.send("Thanks | Now Let's Grind")
                     is_spamming = True
+                    spam_paused = False
                 cur = await bot.db.execute("SELECT command from pokies")
                 res = await cur.fetchone()
+
                 if res is None:
                     await bot.db.execute(
                         "INSERT OR IGNORE INTO pokies (command) VALUES (?)",
@@ -204,6 +205,7 @@ async def on_message(message):
                 async with message.channel.typing():
                     await asyncio.sleep(2.0)
                 is_spamming = False
+
                 await message.channel.send("Ok I Am Going To Sleep")
                 cur = await bot.db.execute("SELECT command from pokies")
                 res = await cur.fetchone()
@@ -252,8 +254,10 @@ async def on_message(message):
             elif f"{bot_prefix}start" in message.content or "captcha done" in message.content:
                 if f"{bot_prefix}start" in message.content:
                     await message.channel.send("Ok Let's Go")
+                    spam_paused = False
                 else:
                     await message.channel.send("Thanks | Now Let's Grind")
+                    spam_paused = False
                 cur = await bot.db.execute("SELECT command from pokies")
                 res = await cur.fetchone()
                 if res is None:
