@@ -4,8 +4,7 @@ AI Autochater For Poketwo
 ## Features : 
 
 > 1. AI Autocatcher
-> 2.  Auto Captcha Solver
-> 3. Spammer With Start And Stop Feature
+> 2. Spammer With Start And Stop Feature
 
 
 --------
